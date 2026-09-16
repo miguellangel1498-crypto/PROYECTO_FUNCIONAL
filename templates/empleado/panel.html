@@ -1,0 +1,22 @@
+﻿{% extends 'base.html' %}
+{% block title %}Mi Panel -- {{ empresa.nombre }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="rounded-2xl bg-gradient-to-br from-indigo-600 to-emerald-600 p-6 sm:p-8 text-white shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <p class="text-sm font-medium text-white/80">Panel del empleado</p>
+                <h1 class="text-2xl sm:text-3xl font-black mt-1">Hola, {{ current_user.nombre }}</h1>
+                <p class="text-white/90 mt-1">{{ empresa.nombre }}</p>
+                {% if current_user.cargo %}<span class="inline-block mt-2 bg-white/20 text-white/80 rounded-full px-3 py-0.5 text-xs font-semibold">{{ current_user.cargo }}</span>{% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <h3 class="font-bold text-slate-900 mb-2">Tu rol</h3>
+        <p class="text-sm text-slate-500">Como empleado, puedes consultar la informacion de la empresa. El diagnostico de madurez es gestionado por el administrador de la empresa.</p>
+    </div>
+</div>
+{% endblock %}

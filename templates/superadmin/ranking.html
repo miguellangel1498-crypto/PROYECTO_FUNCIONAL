@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Ranking - Growth Horizon{% endblock %}
+{% block cabecera %}Ranking de Empresas{% endblock %}
+{% block subcabecera %}Clasificacion por indice de madurez{% endblock %}
+
+{% block contenido %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    {% if empresas_ranking %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">#</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Empresa</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Indice</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Nivel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in empresas_ranking %}
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="px-6 py-4 font-bold text-slate-800">
+                        {% if loop.index <= 3 %}
+                        <span class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-400 to-emerald-500 text-white flex items-center justify-center text-xs font-black">
+                            {{ loop.index }}
+                        </span>
+                        {% else %}
+                        {{ loop.index }}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 font-medium text-slate-800">
+                        <a href="{{ url_for('superadmin.detalle_empresa', empresa_id=emp.id) }}" class="text-cyan-600 hover:text-cyan-800 transition">
+                            {{ emp.nombre }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-emerald-500">
+                            {{ emp.indice }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs font-bold rounded
+                            {% if emp.nivel == 'OPTIMIZADO' %}bg-emerald-100 text-emerald-700
+                            {% elif emp.nivel == 'AVANZADO' %}bg-cyan-100 text-cyan-700
+                            {% elif emp.nivel == 'INTERMEDIO' %}bg-blue-100 text-blue-700
+                            {% elif emp.nivel == 'BASICO' %}bg-amber-100 text-amber-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ emp.nivel }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+        <p class="text-slate-500">No hay empresas con evaluaciones finalizadas aun.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

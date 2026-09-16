@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Sectores - Growth Horizon{% endblock %}
+{% block cabecera %}Gestion de Sectores{% endblock %}
+{% block subcabecera %}{{ sectores | length }} sectores registrados{% endblock %}
+
+{% block contenido %}
+<div class="flex items-center justify-between mb-6">
+    <p class="text-sm text-slate-500">Administra el catalogo de sectores economicos</p>
+    <a href="{{ url_for('superadmin.sector_nuevo') }}"
+        class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white rounded-lg text-sm font-medium hover:from-cyan-600 hover:to-emerald-600 transition">
+        Nuevo sector
+    </a>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Nombre</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Descripcion</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Empresas</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Accion</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in sectores %}
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="px-6 py-4 font-medium text-slate-800">{{ s.nombre }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ s.descripcion or '--' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ s.empresas.count() }}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center gap-2">
+                            <a href="{{ url_for('superadmin.sector_editar', sector_id=s.id_sector) }}"
+                                class="text-cyan-600 hover:text-cyan-800 font-medium transition">Editar</a>
+                            {% if s.empresas.count() == 0 %}
+                            <form method="POST" action="{{ url_for('superadmin.sector_eliminar', sector_id=s.id_sector) }}"
+                                onsubmit="return confirm('Eliminar este sector?');">
+                                <button type="submit" class="text-red-500 hover:text-red-700 font-medium transition">Eliminar</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

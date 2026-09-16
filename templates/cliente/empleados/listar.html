@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Empleados &middot; {{ empresa.nombre }}{% endblock %}
+{% block cabecera %}Empleados de {{ empresa.nombre }}{% endblock %}
+{% block subcabecera %}Gestiona los vendedores y personal operativo de tu negocio.{% endblock %}
+
+{% block contenido %}
+    <div class="flex justify-end mb-4">
+        <a href="{{ url_for('cliente.empleados_nuevo') }}"
+           class="px-4 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 text-sm font-semibold hover:opacity-90 transition">
+            ＋ Nuevo empleado
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="text-left text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100 bg-slate-50">
+                    <th class="px-5 py-3 font-semibold">Nombre</th>
+                    <th class="px-5 py-3 font-semibold">Correo</th>
+                    <th class="px-5 py-3 font-semibold">Cargo</th>
+                    <th class="px-5 py-3 font-semibold">Estado</th>
+                    <th class="px-5 py-3 font-semibold text-right">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            {% for empleado in empleados %}
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="px-5 py-3 font-medium text-slate-800">{{ empleado.nombre }}</td>
+                    <td class="px-5 py-3 text-slate-600">{{ empleado.email }}</td>
+                    <td class="px-5 py-3 text-slate-600">{{ empleado.cargo or '—' }}</td>
+                    <td class="px-5 py-3">
+                        <span class="px-2 py-0.5 text-xs rounded-full {{ 'bg-emerald-100 text-emerald-700' if empleado.activo else 'bg-slate-100 text-slate-500' }}">
+                            {{ 'Activo' if empleado.activo else 'Inactivo' }}
+                        </span>
+                    </td>
+                    <td class="px-5 py-3 text-right">
+                        <div class="flex justify-end gap-2">
+                            <form method="post" action="{{ url_for('cliente.empleados_cambiar_estado', empleado_id=empleado.id) }}">
+                                <button class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium text-slate-700 hover:bg-slate-50 transition">
+                                    {{ 'Desactivar' if empleado.activo else 'Activar' }}
+                                </button>
+                            </form>
+                            <form method="post" action="{{ url_for('cliente.empleados_eliminar', empleado_id=empleado.id) }}"
+                                  onsubmit="return confirm('¿Eliminar este empleado?')" class="gh-delete-form">
+                                <button type="submit" class="gh-delete-btn-sm">
+                                    <svg class="gh-delete-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="px-5 py-12 text-center text-slate-400 text-sm">
+                        Aún no has registrado empleados.
+                        <a href="{{ url_for('cliente.empleados_nuevo') }}" class="block mt-2 text-cyan-600 hover:text-cyan-700">＋ Registrar el primero</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-4 bg-sky-50 border border-sky-200 rounded-xl p-4 text-sm text-sky-800">
+        Los empleados pueden <strong>consultar informacion</strong> de la empresa, pero no tienen
+        acceso al diagnostico, configuracion ni a la gestion de otros empleados.
+    </div>
+{% endblock %}

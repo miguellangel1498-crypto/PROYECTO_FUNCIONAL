@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Tamanos de empresa - Growth Horizon{% endblock %}
+{% block cabecera %}Tamanos de empresa{% endblock %}
+{% block subcabecera %}Administra las categorias de tamano de empresa.{% endblock %}
+
+{% block contenido %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <p class="text-sm text-slate-500">{{ tamanos|length }} tamanos registrados</p>
+        <a href="{{ url_for('superadmin.tamano_nuevo') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+            + Nuevo tamano
+        </a>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Nombre</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Descripcion</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Empleados min</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Empleados max</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Empresas</th>
+                    <th class="text-right px-6 py-3 font-semibold text-slate-600">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tam in tamanos %}
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="px-6 py-4 font-medium text-slate-700">{{ tam.nombre }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ tam.descripcion or '---' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ tam.numero_empleados_min or '---' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ tam.numero_empleados_max or 'Sin limite' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ tam.empresas.count() }}</td>
+                    <td class="px-6 py-4 text-right">
+                        <a href="{{ url_for('superadmin.tamano_editar', tamano_id=tam.id_tamano) }}" class="text-indigo-600 hover:text-indigo-800 mr-3">Editar</a>
+                        <form method="post" action="{{ url_for('superadmin.tamano_eliminar', tamano_id=tam.id_tamano) }}" class="gh-delete-form inline" onsubmit="return confirm('Eliminar este tamano?')">
+                            <button class="text-red-500 hover:text-red-700">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

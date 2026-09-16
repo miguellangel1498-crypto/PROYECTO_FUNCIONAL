@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Panel General &middot; Growth Horizon{% endblock %}
+{% block cabecera %}Panel General{% endblock %}
+{% block subcabecera %}Resumen del ecosistema empresarial por sector económico.{% endblock %}
+
+{% block contenido %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl">🏢</div>
+            <div>
+                <p class="text-sm text-slate-500">Empresas registradas</p>
+                <p class="text-3xl font-black text-slate-900">{{ total_empresas }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-2xl">🗂️</div>
+            <div>
+                <p class="text-sm text-slate-500">Sectores económicos</p>
+                <p class="text-3xl font-black text-slate-900">{{ total_sectores }}</p>
+            </div>
+        </div>
+
+        <div class="sm:col-span-2 lg:col-span-1 bg-white rounded-2xl shadow-sm border border-slate-200 p-6 flex items-center gap-5">
+            <div class="w-14 h-14 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center text-2xl">🛡️</div>
+            <div>
+                <p class="text-sm text-slate-500">Acciones auditadas recientemente</p>
+                <p class="text-3xl font-black text-slate-900">{{ ultimas_auditorias | length }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-slate-900 mb-4">Empresas por sector</h3>
+            {% if empresas_por_sector %}
+                <div class="space-y-3">
+                {% for nombre, conteo in empresas_por_sector %}
+                    {% set maximo = empresas_por_sector[0][1] if empresas_por_sector[0][1] > 0 else 1 %}
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="font-medium text-slate-700">{{ nombre or 'Sin sector' }}</span>
+                            <span class="text-slate-500">{{ conteo }} empresas</span>
+                        </div>
+                        <div class="h-2.5 rounded-full bg-slate-100 overflow-hidden">
+                            <div class="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-500" style="width: {{ (conteo / maximo) * 100 }}%"></div>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-sm text-slate-500">Aún no hay empresas registradas.</p>
+            {% endif %}
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-slate-900">Actividad reciente</h3>
+                {% if current_user.es_superadmin %}
+                <a href="{{ url_for('seguridad.auditoria') }}" class="text-sm text-cyan-600 hover:text-cyan-700">Ver todo →</a>
+                {% endif %}
+            </div>
+            {% if ultimas_auditorias %}
+                <ul class="divide-y divide-slate-100">
+                {% for reg in ultimas_auditorias %}
+                    <li class="py-3 flex items-start gap-3">
+                        <span class="w-2 h-2 rounded-full mt-2 shrink-0
+                            {% if reg.accion == 'LOGIN_EXITOSO' %}bg-emerald-500
+                            {% elif reg.accion == 'LOGOUT' %}bg-slate-400
+                            {% elif reg.accion == 'LOGIN_FALLIDO' %}bg-red-500
+                            {% elif reg.accion == 'DELETE' or reg.accion == 'REGISTRO_USUARIO' %}bg-amber-500
+                            {% else %}bg-cyan-500{% endif %}"></span>
+                        <div class="min-w-0">
+                            <p class="text-sm text-slate-700 truncate">{{ reg.detalle or ('Acción ' + reg.accion) }}</p>
+                            <p class="text-xs text-slate-400">{{ reg.accion }} · {{ reg.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-sm text-slate-500">Sin actividad registrada todavía.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

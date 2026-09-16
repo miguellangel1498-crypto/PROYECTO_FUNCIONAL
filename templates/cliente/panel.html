@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}Mi empresa - Growth Horizon{% endblock %}
+{% block cabecera %}Panel de {{ empresa.nombre }}{% endblock %}
+{% block subcabecera %}Diagnostica el nivel de madurez empresarial y digital de tu negocio.{% endblock %}
+
+{% block contenido %}
+    <div class="space-y-6">
+        <div class="rounded-2xl bg-gradient-to-br from-cyan-600 to-emerald-600 p-6 sm:p-8 text-white shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <p class="text-sm font-medium text-white/80">Bienvenido a Growth Horizon</p>
+                    <h2 class="text-2xl sm:text-3xl font-black mt-1">{{ empresa.nombre }}</h2>
+                    <p class="text-white/90 mt-2 max-w-xl">Diagnostica el nivel de madurez empresarial y digital de tu negocio respondiendo un cuestionario por dimensiones.</p>
+                </div>
+                <a href="{{ url_for('diagnostico.iniciar') }}"
+                   class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-white text-cyan-700 font-semibold hover:bg-cyan-50 transition shrink-0">
+                    Responder diagnostico
+                </a>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="{{ url_for('diagnostico.iniciar') }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-cyan-100 text-cyan-700 flex items-center justify-center text-xl">[D]</div>
+                <div>
+                    <p class="text-sm text-slate-500">Diagnostico</p>
+                    <p class="text-xl font-black text-slate-900">Responder</p>
+                </div>
+            </a>
+            <a href="{{ url_for('diagnostico.historial') }}" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 hover:border-emerald-300 transition flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl">[H]</div>
+                <div>
+                    <p class="text-sm text-slate-500">Historial</p>
+                    <p class="text-xl font-black text-slate-900">Ver evaluaciones</p>
+                </div>
+            </a>
+            <a href="{{ url_for('analisis.principal') }}" class="bg-gradient-to-br from-cyan-600 to-emerald-600 rounded-2xl p-6 hover:opacity-95 transition flex items-center justify-between text-white">
+                <div>
+                    <p class="text-sm text-white/70 font-medium">Analisis</p>
+                    <p class="text-xl font-black">Ver analisis</p>
+                </div>
+                <span class="text-3xl">[A]</span>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-slate-900 mb-4">Datos de tu negocio</h3>
+            <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                <div>
+                    <dt class="text-slate-500">Nombre</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.nombre }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">NIT</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.nit or '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Sector</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.sector.nombre if empresa.sector else '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Tamano</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.tamano.nombre if empresa.tamano else '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Ciudad</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.ciudad or '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Telefono</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.telefono or '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Correo</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.correo or '---' }}</dd>
+                </div>
+                <div>
+                    <dt class="text-slate-500">Empleados</dt>
+                    <dd class="font-medium text-slate-800">{{ empresa.numero_empleados or '---' }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        {% if ultimoResultado %}
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+            <h3 class="font-bold text-slate-900 mb-4">Ultimo resultado</h3>
+            <div class="flex items-center gap-6">
+                <div class="text-center">
+                    <p class="text-sm text-slate-500">Indice</p>
+                    <p class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-emerald-500">{{ ultimoResultado.indice_madurez }}</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-slate-500">Nivel</p>
+                    <p class="text-lg font-bold
+                        {% if ultimoResultado.nivel == 'OPTIMIZADO' %}text-emerald-600
+                        {% elif ultimoResultado.nivel == 'AVANZADO' %}text-cyan-600
+                        {% elif ultimoResultado.nivel == 'INTERMEDIO' %}text-blue-600
+                        {% elif ultimoResultado.nivel == 'BASICO' %}text-amber-600
+                        {% else %}text-red-600{% endif %}">
+                        {{ ultimoResultado.nivel }}
+                    </p>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-slate-500">Fecha</p>
+                    <p class="text-sm font-medium text-slate-700">{{ ultima_eval.fecha_finalizacion.strftime('%d/%m/%Y') if ultima_eval and ultima_eval.fecha_finalizacion else 'N/A' }}</p>
+                </div>
+                <a href="{{ url_for('diagnostico.resultados', id_evaluacion=ultima_eval.id_evaluacion) }}" class="ml-auto text-cyan-600 hover:text-cyan-800 font-medium transition text-sm">
+                    Ver detalles
+                </a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

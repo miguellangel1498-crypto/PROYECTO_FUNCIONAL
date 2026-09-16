@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Growth Horizon{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef7ff',
+                            100: '#d9edff',
+                            500: '#0e7490',
+                            600: '#0f766e',
+                            700: '#115e59',
+                            900: '#134e4a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ripple.css') }}" />
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .gh-sidebar {
+            background-color: #0D1117;
+        }
+
+        .gh-sidebar .gh-nav-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.625rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #8b949e;
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 300ms ease, color 200ms ease, filter 300ms ease, transform 300ms ease;
+        }
+
+        .gh-sidebar .gh-nav-item:hover {
+            background-color: #21262C;
+            color: #e6edf3;
+        }
+
+        .gh-sidebar .gh-nav-item:active,
+        .gh-sidebar .gh-nav-item.gh-active {
+            background-color: #1A1F24;
+            color: #e6edf3;
+            outline: none;
+        }
+
+        .gh-sidebar .gh-nav-item::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -12px;
+            width: 4px;
+            height: 0;
+            background-color: #2F81F7;
+            border-radius: 4px;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: height 250ms cubic-bezier(0.25, 0.8, 0.25, 1), opacity 250ms ease;
+        }
+
+        .gh-sidebar .gh-nav-item:hover::before {
+            height: 50%;
+            opacity: 0.4;
+        }
+
+        .gh-sidebar .gh-nav-item:active::before,
+        .gh-sidebar .gh-nav-item.gh-active::before {
+            height: 60%;
+            opacity: 1;
+        }
+
+        .gh-sidebar nav:hover > .gh-nav-item:not(:hover) {
+            filter: blur(0.8px);
+            transform: scale(0.98);
+            opacity: 0.6;
+        }
+
+        .gh-sidebar nav:hover > .gh-nav-item:not(:hover) {
+            transition: filter 300ms ease, transform 300ms ease, opacity 300ms ease;
+        }
+
+        .gh-sidebar nav:not(:hover) > .gh-nav-item {
+            filter: none;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .gh-sidebar .gh-section-label {
+            padding: 0.75rem 0.75rem 0.25rem;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #484f58;
+        }
+
+        .gh-sidebar .gh-divider {
+            height: 1px;
+            background-color: #21262C;
+            margin: 0.5rem 0.75rem;
+        }
+
+        .gh-sidebar-footer {
+            border-top: 1px solid #21262C;
+            color: #484f58;
+        }
+
+        .gh-delete-form {
+            display: inline-flex;
+            align-items: center;
+        }
+    </style>
+</head>
+
+<body class="h-full bg-slate-100 text-slate-800 antialiased">
+
+    <div class="flex h-screen overflow-hidden" x-data="{ empresaMenu: true }">
+
+        <aside class="w-72 flex-col shrink-0 gh-sidebar" x-show="empresaMenu">
+            <div class="flex items-center gap-3 px-6 py-5 border-b" style="border-color: #21262C;">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-500 flex items-center justify-center text-lg font-black text-slate-900">
+                    GH</div>
+                <div>
+                    <h1 class="text-white font-bold text-lg leading-tight">Growth Horizon</h1>
+                    <p class="text-xs" style="color: #484f58;">Diagnostico de madurez</p>
+                </div>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto scrollbar-thin px-3 py-4 space-y-1">
+                <a href="{{ url_for('main.dashboard') }}"
+                    class="gh-nav-item {% if request.endpoint == 'main.dashboard' %}gh-active{% endif %}">
+                    <span class="text-lg">[#]</span> Panel General
+                </a>
+
+                {% if current_user.is_authenticated and current_user.tiene_rol('SUPERADMIN') %}
+                <div class="gh-divider"></div>
+                <p class="gh-section-label">Superadministrador</p>
+                <a href="{{ url_for('superadmin.panel') }}"
+                    class="gh-nav-item {% if request.endpoint == 'superadmin.panel' %}gh-active{% endif %}">
+                    <span class="text-lg">[S]</span> Panel global
+                </a>
+                <a href="{{ url_for('superadmin.empresas') }}"
+                    class="gh-nav-item {% if request.endpoint == 'superadmin.empresas' %}gh-active{% endif %}">
+                    <span class="text-lg">[E]</span> Empresas
+                </a>
+                <a href="{{ url_for('superadmin.sectores') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('superadmin.sector') %}gh-active{% endif %}">
+                    <span class="text-lg">[SC]</span> Sectores
+                </a>
+                <a href="{{ url_for('superadmin.tamanos') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('superadmin.tamano') %}gh-active{% endif %}">
+                    <span class="text-lg">[T]</span> Tamano empresas
+                </a>
+                <a href="{{ url_for('diagnostico_admin.panel') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('diagnostico_admin') %}gh-active{% endif %}">
+                    <span class="text-lg">[D]</span> Dimensiones/Preguntas
+                </a>
+                <a href="{{ url_for('superadmin.ranking') }}"
+                    class="gh-nav-item {% if request.endpoint == 'superadmin.ranking' %}gh-active{% endif %}">
+                    <span class="text-lg">[R]</span> Ranking empresas
+                </a>
+                <a href="{{ url_for('seguridad.auditoria') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('seguridad') %}gh-active{% endif %}">
+                    <span class="text-lg">[L]</span> Auditoria
+                </a>
+                {% endif %}
+
+                {% if current_user.is_authenticated and current_user.tiene_rol('EMPRESA') and current_user.tiene_empresa and current_user.acceso_empresa_activa %}
+                <div class="gh-divider"></div>
+                <p class="gh-section-label">Mi empresa</p>
+                <a href="{{ url_for('cliente.panel') }}"
+                    class="gh-nav-item {% if request.endpoint == 'cliente.panel' %}gh-active{% endif %}">
+                    <span class="text-lg">[#]</span> Panel
+                </a>
+                <a href="{{ url_for('diagnostico.iniciar') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('diagnostico') and 'resultados' not in request.endpoint and 'historial' not in request.endpoint %}gh-active{% endif %}">
+                    <span class="text-lg">[D]</span> Responder diagnostico
+                </a>
+                <a href="{{ url_for('diagnostico.historial') }}"
+                    class="gh-nav-item {% if request.endpoint == 'diagnostico.historial' %}gh-active{% endif %}">
+                    <span class="text-lg">[H]</span> Historial
+                </a>
+                <a href="{{ url_for('recomendaciones.listar') }}"
+                    class="gh-nav-item {% if request.endpoint and request.endpoint.startswith('recomendaciones') %}gh-active{% endif %}">
+                    <span class="text-lg">[RC]</span> Recomendaciones
+                </a>
+                <a href="{{ url_for('analisis.principal') }}"
+                    class="gh-nav-item {% if request.endpoint == 'analisis.principal' %}gh-active{% endif %}">
+                    <span class="text-lg">[A]</span> Analisis
+                </a>
+                {% endif %}
+            </nav>
+
+            <div class="gh-sidebar-footer px-6 py-4 text-xs">
+                GH Platform v2.0
+            </div>
+        </aside>
+
+        <div
+            class="md:hidden flex items-center justify-between text-white px-4 py-3 fixed top-0 inset-x-0 z-20" style="background-color: #0D1117;">
+            <div class="flex items-center gap-2 font-bold">GH Growth Horizon</div>
+            {% if current_user.is_authenticated %}
+            <button @click="empresaMenu = !empresaMenu"
+                class="flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm transition" style="background-color: #161b22; color: #8b949e;">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+                Menu
+            </button>
+            <a href="{{ url_for('auth.logout') }}" class="text-sm" style="color: #8b949e;">Salir</a>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="text-sm" style="color: #8b949e;">Iniciar sesion</a>
+            {% endif %}
+        </div>
+
+        <div class="flex-1 flex flex-col overflow-hidden pt-14 md:pt-0">
+            <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">{% block cabecera %}{% endblock %}</h2>
+                    <p class="text-sm text-slate-500">{% block subcabecera %}{% endblock %}</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    {% if current_user.is_authenticated %}
+                    <span class="hidden sm:inline-flex items-center gap-2 text-sm text-slate-600">
+                        <span
+                            class="w-8 h-8 rounded-full bg-gradient-to-br from-cyan-500 to-emerald-500 text-white flex items-center justify-center text-xs font-bold">
+                            {{ current_user.nombre[:1] | upper }}
+                        </span>
+                        {{ current_user.nombre }}
+                        <span
+                            class="px-2 py-0.5 text-xs rounded-full
+                            {% if current_user.es_superadmin %}bg-purple-100 text-purple-700
+                            {% elif current_user.es_empresa %}bg-emerald-100 text-emerald-700
+                            {% else %}bg-slate-100 text-slate-700{% endif %}">
+                            {{ current_user.etiqueta_rol }}
+                        </span>
+                    </span>
+                    <a href="{{ url_for('auth.logout') }}"
+                        class="text-sm text-slate-500 hover:text-red-600 transition">Salir</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main class="flex-1 overflow-y-auto scrollbar-thin p-6">
+                <div class="space-y-4">
+                    {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% for categoria, mensaje in mensajes %}
+                    <div class="px-4 py-3 rounded-lg text-sm font-medium border
+                            {% if categoria == 'success' %}bg-emerald-50 text-emerald-800 border-emerald-200
+                            {% elif categoria == 'error' %}bg-red-50 text-red-800 border-red-200
+                            {% elif categoria == 'warning' %}bg-amber-50 text-amber-800 border-amber-200
+                            {% else %}bg-sky-50 text-sky-800 border-sky-200{% endif %}">
+                        {{ mensaje }}
+                    </div>
+                    {% endfor %}
+                    {% endwith %}
+                </div>
+
+                {% block contenido %}{% block content %}{% endblock %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const elements = document.querySelectorAll('.animar-al-scroll');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            elements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+    <script src="{{ url_for('static', filename='ripple.js') }}"></script>
+</body>
+
+</html>

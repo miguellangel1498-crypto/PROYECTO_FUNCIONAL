@@ -1,0 +1,260 @@
+Eres un desarrollador senior Python/Flask. Trabajas en un proyecto universitario llamado
+"Growth Horizon": una plataforma web multi-empresa que diagnostica el nivel de madurez
+empresarial y digital de negocios de cualquier tamaño (desde una tienda de barrio hasta una
+empresa grande).
+
+CONTEXTO: El proyecto actual está armado como un sistema de administración de ventas de un solo
+negocio (con módulos de ventas, inventario y horarios). Necesito corregirlo para que sea una
+plataforma de diagnóstico multi-empresa.
+
+**ALCANCE DEL PROYECTO — LEE ESTO ANTES DE EMPEZAR:**
+Esta plataforma NO es un sistema de gestión de ventas, inventario u operación diaria del
+negocio del cliente. Es una herramienta de EVALUACIÓN/DIAGNÓSTICO: la empresa responde un
+cuestionario organizado por dimensiones, el sistema calcula un índice de madurez ponderado, lo
+compara contra el promedio de su sector, lo segmenta (Inicial / En Desarrollo / Consolidado) y
+le da recomendaciones. El flujo central es: RESPONDER → CALCULAR → COMPARAR → RECOMENDAR.
+Cualquier funcionalidad que sirva para que el cliente opere su negocio (vender, gestionar
+stock, llevar horarios de atención) está FUERA de alcance, sin importar qué tan útil parezca.
+Los datos operativos relevantes (ingresos, control de inventario, canal de venta, etc.) se
+capturan como preguntas dentro del mismo cuestionario de diagnóstico — nunca como módulos CRUD
+independientes.
+
+ARCHIVOS EXISTENTES EN EL PROYECTO:
+- app.py (factory Flask, seed de demo, registros de blueprints)
+- config.py (Config con SQLite, sesiones, CSRF)
+- extensions.py (SQLAlchemy, Bcrypt, LoginManager)
+- models/base.py (TimestampMixin con created_at/updated_at)
+- models/empresa.py (Empresa: id, nombre, ruc, sector_id FK, actividad, correo, telefono, direccion, sitio_web, estado, notas_admin)
+- models/usuario.py (Usuario: id, nombre, email, password_hash, rol, cargo, activo, sector_id FK, empresa_id FK, ultimo_acceso, intentos_fallidos, ultimo_intento_fallido)
+- models/sector.py (Sector: id, nombre, descripcion, color)
+- models/roles.py (ROL_SUPERADMIN, ROL_EMPRESA, ROL_EMPLEADO, MATRIZ_PERMISOS, ESTADOS_EMPRESA, rol_tiene_permiso())
+- models/auditoria.py (Auditoria: id, usuario_id FK, accion, entidad, entidad_id, detalle, ip_address, user_agent, created_at)
+- models/configuracion.py (Configuracion: clave PK, valor, descripcion)
+- models/producto.py (Producto: id, empresa_id FK, nombre, categoria, precio — CON relación a Venta — SE DEBE ELIMINAR)
+- models/venta.py (Venta: id, empresa_id FK, producto_id FK, cantidad, precio_unitario, fecha — SE DEBE ELIMINAR)
+- models/horario.py (HorarioAtencion: id, empresa_id FK, dia, dia_numero, apertura, cierre — SE DEBE ELIMINAR)
+- routes/auth.py (login, registro, logout)
+- routes/main.py (index, dashboard con enrutador por rol)
+- routes/analisis.py (análisis de ventas: ingresos, ticket promedio, productos más vendidos, etc. — SE REESCRIBE COMPLETO)
+- routes/cliente.py (panel empresa: CRUD productos, CRUD horarios, CRUD ventas, CRUD empleados, seguridad, exportaciones)
+- routes/empleado.py (panel empleado: ver productos, ver/crear ventas del día)
+- routes/empresas.py (CRUD empresas para superadmin, exportaciones)
+- routes/superadmin.py (panel global, aprobar/rechazar/suspend/activar empresas, permisos)
+- routes/sectores.py (CRUD sectores)
+- routes/seguridad.py (auditoría)
+- routes/decoradores.py (superadmin_requerido, admin_empresa_requerido, empleado_requerido, etc.)
+- services/auditoria.py (registrar, AutoAuditoria con event listeners)
+- services/exporter.py (exportar_ventas, exportar_inventario con openpyxl — AMBAS SE ELIMINAN)
+- templates/ (base.html, index.html, 403.html, 404.html, analisis.html, auth/, cliente/, empleado/, empresas/, superadmin/, sectores/, seguridad/)
+- extensions.py usa Flask-SQLAlchemy, Flask-Bcrypt, Flask-Login
+- ORM: SQLAlchemy (flask_sqlalchemy)
+
+ESTILO DE CÓDIGO:
+- Clases de modelos con herencia de TimestampMixin y db.Model
+- Flask Blueprints con url_prefix
+- Decoradores para permisos en routes/decoradores.py
+- Plantillas Jinja2 con Tailwind CSS
+- Flash messages para feedback
+- El database default es SQLite en instance/growth_horizon.db
+
+=== CAMBIO 1: ELIMINAR Venta, HorarioAtencion, Producto y MovimientoInventario ===
+Ninguno de estos modelos forma parte del alcance (gestión operativa del cliente, no
+diagnóstico). Eliminar TODO rastro de los cuatro:
+
+- Eliminar models/venta.py, models/horario.py, models/producto.py y, si existiera de una
+  iteración previa, models/movimiento_inventario.py.
+- En models/__init__.py: eliminar imports y __all__ de Venta, HorarioAtencion, Producto,
+  MovimientoInventario, DIAS_SEMANA.
+- En routes/cliente.py: eliminar TODAS las rutas de ventas (ventas_listar, ventas_nueva,
+  ventas_eliminar), horarios (horarios_listar, horarios_nuevo, horarios_eliminar) y productos
+  (cualquier CRUD de productos/inventario). Eliminar imports de Venta, HorarioAtencion,
+  Producto, HorarioAtencion, DIAS_SEMANA, exportar_ventas, exportar_inventario. Adaptar la
+  ruta panel() para que ya no consulte ventas, horarios ni productos.
+- En routes/empleado.py: eliminar TODAS las rutas de ventas (panel principal no debe mostrar
+  ventas_hoy, ventas(), ventas_nueva()) ni de productos. Eliminar imports de Venta y Producto.
+- En routes/empresas.py: eliminar rutas exportar_ventas_xlsx, exportar_ventas_empresa_xlsx,
+  exportar_inventario_xlsx, exportar_inventario_empresa_xlsx. Adaptar detalle() para que no
+  consulte ventas, horarios ni productos. Eliminar imports de Venta, HorarioAtencion, Producto,
+  exportar_ventas, exportar_inventario.
+- En routes/superadmin.py: en detalle_empresa(), eliminar consultas de Venta, HorarioAtencion y
+  Producto. Eliminar sus imports.
+- En routes/analisis.py: eliminar TODA la lógica de cálculos de ventas. Se reemplaza
+  completamente con lógica de diagnóstico (ver Cambio 3).
+- En app.py: en la función seed(), eliminar la creación de ventas, horarios y productos/
+  inventario demo. Eliminar imports de Venta, HorarioAtencion y Producto.
+- En services/exporter.py: eliminar exportar_ventas() y exportar_inventario() por completo (no
+  se reemplaza por ninguna exportación de inventario — ese dato ahora vive como respuestas de
+  diagnóstico, ver Cambio 2).
+- En models/roles.py: eliminar de MATRIZ_PERMISOS los permisos "Registrar ventas" y
+  "Configuración y horarios". Quitar de ROLES_DISPONIBLES la descripción "Empleado / Vendedor".
+- Templates a eliminar: templates/cliente/ventas/ (listar.html, form.html),
+  templates/cliente/horarios/ (listar.html, form.html), templates/cliente/productos/ (si
+  existiera todo el directorio de gestión de inventario), templates/empleado/ventas.html,
+  templates/empleado/ventas_nueva.html.
+- Templates a modificar: templates/cliente/panel.html (quitar secciones de ventas, horarios y
+  productos/inventario), templates/empleado/panel.html (quitar todo lo de ventas),
+  templates/analisis.html (reescribir completamente, ver Cambio 3),
+  templates/empresas/detalle.html (quitar ventas/horarios/productos),
+  templates/superadmin/detalle_empresa.html (quitar ventas/horarios/productos),
+  templates/base.html (sidebar: quitar links de ventas, horarios y productos/inventario,
+  agregar links de diagnóstico — ver Cambio 5), templates/index.html (quitar menciones a
+  ventas, horarios e inventario en la landing page, reemplazar por lenguaje de diagnóstico de
+  madurez).
+
+=== CAMBIO 2: DATOS OPERATIVOS COMO PREGUNTAS DEL CUESTIONARIO (no como módulos aparte) ===
+Todo lo que antes se pensó capturar vía Producto/Venta/MovimientoInventario se traduce en
+Indicadores dentro de las dimensiones "Financiera" y "Operación" (ver Cambio 4 y 6), por
+ejemplo:
+- "¿Llevas un control organizado de tu inventario?" (AUTOREPORTADO).
+- "¿Cuál fue tu ingreso aproximado el último mes?" (AUTOREPORTADO, valor numérico).
+- "¿Qué porcentaje de tus ingresos proviene de canales digitales?" (AUTOREPORTADO).
+No se crea ninguna tabla, ruta ni pantalla operativa para esto — se responde y se guarda igual
+que cualquier otro indicador del diagnóstico, vía RespuestaDiagnostico (Cambio 4).
+
+=== CAMBIO 3: REEMPLAZAR LÓGICA DE ANÁLISIS POR DIAGNÓSTICO ===
+Reescribir routes/analisis.py completamente. Ahora debe calcular:
+- El índice de madurez de una empresa: promedio ponderado de las dimensiones en las que ha
+  respondido (peso de cada indicador dentro de su dimensión, y peso de cada dimensión dentro
+  del índice general).
+- Comparativo de una empresa contra el promedio de su sector, y opcionalmente contra empresas
+  de tamaño similar (mismo tamano_empresa, ver Cambio 4) para que la comparación sea justa
+  entre una tienda de barrio y una empresa grande.
+- Segmentación: Inicial (0-39), En Desarrollo (40-69), Consolidado (70-100).
+- Mostrar recomendaciones según la dimensión y el nivel (tabla Recomendacion).
+- Los indicadores de tipo CALCULADO derivan su valor únicamente de datos que ya existen dentro
+  del sistema de diagnóstico (por ejemplo, combinación de varias RespuestaDiagnostico, o
+  comparación entre dos snapshots de IndiceMadurez de fechas distintas para medir progreso) —
+  nunca de módulos operativos externos, que quedaron fuera de alcance.
+- Agregar un ranking de empresas por índice de madurez (dentro del sector y global), visible
+  solo para superadmin.
+
+=== CAMBIO 4: AGREGAR MODELOS DE DIAGNÓSTICO ===
+Crear los siguientes modelos en models/ (mismo estilo ORM que los existentes):
+
+1. models/dimension.py:
+   - id (Integer, PK)
+   - nombre (String(100), unique, not null)
+   - descripcion (Text, nullable)
+   - peso (Numeric(5,2), default=1.0) — para el promedio ponderado
+
+2. models/indicador.py:
+   - id (Integer, PK)
+   - dimension_id (Integer, FK → dimensiones.id, not null)
+   - texto (Text, not null) — texto de la pregunta
+   - peso (Numeric(5,2), default=1.0)
+   - tipo_medicion (String(20), not null, check in ('AUTOREPORTADO', 'CALCULADO'))
+   - Relación: dimension = db.relationship(...)
+
+3. models/respuesta_diagnostico.py:
+   - id (Integer, PK)
+   - empresa_id (Integer, FK → empresas.id, ON DELETE CASCADE, not null)
+   - indicador_id (Integer, FK → indicadores.id, not null)
+   - valor (Numeric(5,2), not null) — puntaje 0-100
+   - fecha (DateTime, default=datetime.utcnow)
+   - UniqueConstraint(empresa_id, indicador_id)
+   - Relaciones: empresa, indicador
+
+4. models/indice_madurez.py:
+   - id (Integer, PK)
+   - empresa_id (Integer, FK → empresas.id, ON DELETE CASCADE, not null)
+   - dimension_id (Integer, FK → dimensiones.id, not null)
+   - puntaje (Numeric(5,2), not null)
+   - fecha (DateTime, default=datetime.utcnow)
+   - Relaciones: empresa, dimension
+   - Esta tabla es la fuente de la trazabilidad histórica del diagnóstico (cada recálculo deja
+     un snapshot con fecha) — no se necesita ninguna tabla operativa adicional para tener
+     historial.
+
+5. models/segmento.py:
+   - id (Integer, PK)
+   - nombre (String(50), unique, not null) — "Inicial", "En Desarrollo", "Consolidado"
+   - rango_min (Numeric(5,2), not null)
+   - rango_max (Numeric(5,2), not null)
+   - descripcion (Text, nullable)
+
+6. models/recomendacion.py:
+   - id (Integer, PK)
+   - dimension_id (Integer, FK → dimensiones.id, not null)
+   - rango_min (Numeric(5,2), not null)
+   - rango_max (Numeric(5,2), not null)
+   - texto (Text, not null)
+   - prioridad (String(20), not null, default='MEDIA', check in ('BAJA', 'MEDIA', 'ALTA'))
+   - Relación: dimension
+
+Adicional en models/empresa.py: agregar campo `tamano_empresa` (String(20), not null,
+default='PEQUENA', check in ('MICRO', 'PEQUENA', 'MEDIANA', 'GRANDE')) para poder comparar
+empresas de tamaño similar entre sí (una tienda de barrio no debería compararse contra una
+empresa grande del mismo sector).
+
+Actualizar models/__init__.py para importar todos los nuevos modelos.
+
+=== CAMBIO 5: routes/diagnostico.py (nuevo blueprint) ===
+Crear un blueprint nuevo `diagnostico_bp` con url_prefix `/diagnostico`:
+- GET /diagnostico/responder: muestra el cuestionario agrupado por dimensión, con las preguntas
+  de tipo AUTOREPORTADO (los CALCULADO no se muestran, se calculan solos en routes/analisis.py).
+  Debe mostrar respuestas previas si ya existen y permitir editarlas.
+- POST /diagnostico/responder: guarda/actualiza RespuestaDiagnostico para la empresa
+  autenticada (upsert usando el UniqueConstraint(empresa_id, indicador_id)).
+- GET /diagnostico/resultados: muestra el índice de madurez calculado, la comparación con el
+  sector/tamaño de empresa, y las recomendaciones (reutiliza la lógica de routes/analisis.py).
+- Proteger todas las rutas con el decorador equivalente a admin_empresa_requerido (o el que
+  aplique según roles) y el nuevo permiso "Responder diagnóstico".
+- Templates: templates/diagnostico/responder.html y templates/diagnostico/resultados.html,
+  mismo estilo visual que el resto (sidebar oscuro, cards con sombra, gradiente cyan/emerald).
+- Registrar el blueprint en app.py.
+- Actualizar templates/base.html (sidebar) para reemplazar los links de ventas/horarios/
+  productos por links a "Responder diagnóstico" y "Ver resultados".
+
+=== CAMBIO 6: Administración de dimensiones/indicadores (superadmin) ===
+Agregar rutas CRUD para superadmin (en routes/superadmin.py o un blueprint nuevo
+routes/diagnostico_admin.py):
+- CRUD de Dimension (nombre, descripción, peso).
+- CRUD de Indicador (texto, dimensión, peso, tipo_medicion).
+- CRUD de Recomendacion (dimensión, rango, texto, prioridad).
+- Proteger con el permiso "Administrar dimensiones/indicadores".
+- Templates correspondientes bajo templates/superadmin/diagnostico/.
+
+=== CAMBIO 7: ACTUALIZAR PERMISOS ===
+En models/roles.py, actualizar MATRIZ_PERMISOS:
+- Quitar: "Registrar ventas", "Configuración y horarios".
+- Agregar: "Responder diagnóstico", "Ver resultados de diagnóstico",
+  "Administrar dimensiones/indicadores" (solo superadmin).
+
+=== CAMBIO 8: SEED DE DIAGNÓSTICO ===
+En app.py, actualizar la función seed():
+- Eliminar creación de ventas, horarios y productos/inventario demo.
+- Crear dimensiones demo: Financiera, Operación, Clientes/Ventas, Digitalización, Datos,
+  Seguridad, Automatización, Analítica.
+- Crear al menos 2-3 indicadores por dimensión (mix de AUTOREPORTADO y CALCULADO), incluyendo
+  los indicadores de "control de inventario", "ingreso mensual aproximado" y "% de ingresos por
+  canal digital" descritos en el Cambio 2 (dentro de Financiera/Operación).
+- Crear segmentos: Inicial (0-39), En Desarrollo (40-69), Consolidado (70-100).
+- Crear recomendaciones de ejemplo para cada dimensión y rango.
+- Crear al menos 2 empresas demo de tamaño distinto (una tienda de barrio MICRO y una empresa
+  MEDIANA/GRANDE), cada una con tamano_empresa correspondiente y respuestas de diagnóstico de
+  ejemplo (vía RespuestaDiagnostico, sin ninguna tabla operativa), para demostrar que el sistema
+  funciona igual de bien para ambos casos.
+
+=== NOTA SOBRE ESTRUCTURAS DE DATOS EXTERNAS (C++) ===
+Otro integrante del equipo está construyendo estructuras de datos (cola, pila, árbol, hash,
+ranking) en C++ como entregable de otra materia. Si en algún punto se pide integrar esa lógica
+al backend, debe reimplementarse en Python dentro de este mismo proyecto Flask, conectada a
+funcionalidad real, por ejemplo:
+- Ranking de empresas por índice de madurez → dentro de routes/analisis.py (Cambio 3).
+- Árbol de dimensión → indicador → estructura de navegación en la administración (Cambio 6).
+- Hash de empresas → índice de búsqueda rápida en routes/empresas.py.
+- Cola de diagnósticos pendientes/desactualizados → recordatorios.
+- Pila de historial → posible "deshacer" integrado con services/auditoria.py.
+No crear ni mantener ejecutables C++ separados como parte de este backend.
+
+REGLAS IMPORTANTES:
+- Mantener el mismo patrón de código existente (Flask Blueprints, SQLAlchemy ORM, Jinja2
+  templates, Tailwind CSS).
+- No usar flask-wtf ni WTForms — seguir con request.form.
+- Usar db.Column con los mismos patrones de nullable, default, index que ya existen.
+- Los templates existentes que se modifiquen deben mantener la misma estética (dark sidebar,
+  cards con sombra, gradientes cyan/emerald).
+- No usar emojis en el código fuente (solo en templates donde ya existen).
+- Crear un archivo PLAN_DE_CAMBIOS.md al final resumiendo todos los cambios realizados,
+  explicando explícitamente cómo cada modelo/ruta nueva conecta con el objetivo central
+  (diagnóstico de madurez empresarial), no solo qué se modificó.

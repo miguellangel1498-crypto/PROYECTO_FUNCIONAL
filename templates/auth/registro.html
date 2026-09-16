@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear cuenta &middot; Growth Horizon</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ripple.css') }}">
+    <style>body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }</style>
+</head>
+<body class="h-full bg-slate-100 text-slate-800 antialiased">
+
+    <div class="min-h-full grid place-items-center px-6 py-12">
+        <div class="w-full max-w-lg space-y-8">
+            <div class="text-center space-y-2">
+                <div class="mx-auto w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-emerald-500 flex items-center justify-center text-xl font-black text-white">GH</div>
+                <h1 class="text-2xl font-bold text-slate-900">Crear cuenta</h1>
+                <p class="text-sm text-slate-500">Registra tu empresa en la plataforma Growth Horizon.</p>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 space-y-5">
+                {% with mensajes = get_flashed_messages(with_categories=true) %}
+                    {% for categoria, mensaje in mensajes %}
+                        <div class="px-4 py-3 rounded-lg text-sm font-medium border
+                            {% if categoria == 'error' %}bg-red-50 text-red-800 border-red-200
+                            {% elif categoria == 'success' %}bg-emerald-50 text-emerald-800 border-emerald-200
+                            {% else %}bg-sky-50 text-sky-800 border-sky-200{% endif %}">
+                            {{ mensaje }}
+                        </div>
+                    {% endfor %}
+                {% endwith %}
+
+                <form method="post" class="space-y-5">
+                    <div>
+                        <h2 class="text-sm font-semibold text-slate-900 mb-3">Datos de la empresa</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-1.5 text-slate-700">Nombre de la empresa</label>
+                                <input type="text" name="nombre_empresa" required
+                                       value="{{ datos_empresa.nombre_empresa if datos_empresa else '' }}"
+                                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                       placeholder="Mi Empresa S.A.C.">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">NIT <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="text" name="nit"
+                                           value="{{ datos_empresa.nit if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="900123456-7">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Numero de empleados <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="number" name="numero_empleados" min="0"
+                                           value="{{ datos_empresa.numero_empleados if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="10">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Sector</label>
+                                    <select name="sector_id" required
+                                            class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm">
+                                        <option value="">Selecciona un sector</option>
+                                        {% for sector in sectores %}
+                                        <option value="{{ sector.id_sector }}" {% if datos_empresa and datos_empresa.sector_id|string == sector.id_sector|string %}selected{% endif %}>{{ sector.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Tamano de la empresa</label>
+                                    <select name="tamano_id" required
+                                            class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm">
+                                        <option value="">Selecciona un tamano</option>
+                                        {% for tamano in tamanos %}
+                                        <option value="{{ tamano.id_tamano }}" {% if datos_empresa and datos_empresa.tamano_id|string == tamano.id_tamano|string %}selected{% endif %}>{{ tamano.nombre }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Ciudad <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="text" name="ciudad"
+                                           value="{{ datos_empresa.ciudad if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Bogota">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Departamento <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="text" name="departamento"
+                                           value="{{ datos_empresa.departamento if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Cundinamarca">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Telefono de la empresa <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="text" name="telefono_empresa"
+                                           value="{{ datos_empresa.telefono_empresa if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="3001234567">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Correo de la empresa <span class="text-slate-400">(opcional)</span></label>
+                                    <input type="email" name="correo_empresa"
+                                           value="{{ datos_empresa.correo_empresa if datos_empresa else '' }}"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="contacto@empresa.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1.5 text-slate-700">Sitio web <span class="text-slate-400">(opcional)</span></label>
+                                <input type="text" name="sitio_web"
+                                       value="{{ datos_empresa.sitio_web if datos_empresa else '' }}"
+                                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                       placeholder="www.empresa.com">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-slate-200 pt-5">
+                        <h2 class="text-sm font-semibold text-slate-900 mb-3">Tus datos</h2>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Nombre</label>
+                                    <input type="text" name="nombre" required autofocus
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Juan">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Apellido</label>
+                                    <input type="text" name="apellido" required
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Perez">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1.5 text-slate-700">Correo electronico</label>
+                                <input type="email" name="email" required
+                                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                       placeholder="nombre@empresa.com">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1.5 text-slate-700">Telefono <span class="text-slate-400">(opcional)</span></label>
+                                <input type="text" name="telefono"
+                                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                       placeholder="3001234567">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Contrasena</label>
+                                    <input type="password" name="password" required minlength="8"
+                                           pattern="(?=.*[A-Z])(?=.*[0-9]).{8,}"
+                                           title="Minimo 8 caracteres, incluyendo una mayuscula y un numero"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Min. 8 caracteres, 1 mayuscula y 1 numero">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Confirmar</label>
+                                    <input type="password" name="confirmar_password" required minlength="8"
+                                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none text-sm"
+                                           placeholder="Repetir contrasena">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit"
+                            class="w-full py-3 rounded-lg bg-gradient-to-r from-indigo-600 to-emerald-600 text-white font-semibold hover:opacity-90 transition">
+                        Crear cuenta
+                    </button>
+                </form>
+            </div>
+
+            <p class="text-center text-sm text-slate-600">
+                Ya tienes cuenta? <a href="{{ url_for('auth.login') }}" class="text-indigo-600 hover:text-indigo-700">Inicia sesion</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='ripple.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Panel Superadmin - Growth Horizon{% endblock %}
+{% block cabecera %}Panel de Superadministrador{% endblock %}
+{% block subcabecera %}Vista general de la plataforma{% endblock %}
+
+{% block contenido %}
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-sm text-slate-500 mb-1">Total empresas</p>
+        <p class="text-3xl font-black text-slate-800">{{ total_empresas }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-sm text-slate-500 mb-1">Empresas activas</p>
+        <p class="text-3xl font-black text-emerald-600">{{ empresas_activas }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-sm text-slate-500 mb-1">Empresas inactivas</p>
+        <p class="text-3xl font-black text-red-500">{{ empresas_inactivas }}</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <p class="text-sm text-slate-500 mb-1">Total usuarios</p>
+        <p class="text-3xl font-black text-cyan-600">{{ total_usuarios }}</p>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <a href="{{ url_for('superadmin.empresas') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Gestionar empresas</h3>
+        <p class="text-sm text-slate-500">Ver, crear, editar y administrar empresas</p>
+    </a>
+    <a href="{{ url_for('superadmin.sectores') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Gestionar sectores</h3>
+        <p class="text-sm text-slate-500">Administrar el catalogo de sectores</p>
+    </a>
+    <a href="{{ url_for('superadmin.tamanos') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Tamano de empresas</h3>
+        <p class="text-sm text-slate-500">Administrar categorias de tamano</p>
+    </a>
+    <a href="{{ url_for('diagnostico_admin.panel') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Dimensiones y preguntas</h3>
+        <p class="text-sm text-slate-500">Administrar el cuestionario de diagnostico</p>
+    </a>
+    <a href="{{ url_for('superadmin.ranking') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Ranking de empresas</h3>
+        <p class="text-sm text-slate-500">Clasificacion por indice de madurez</p>
+    </a>
+    <a href="{{ url_for('seguridad.auditoria') }}"
+        class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:border-cyan-300 transition">
+        <h3 class="font-bold text-slate-800 mb-2">Auditoria</h3>
+        <p class="text-sm text-slate-500">Registro de actividades del sistema</p>
+    </a>
+</div>
+{% endblock %}

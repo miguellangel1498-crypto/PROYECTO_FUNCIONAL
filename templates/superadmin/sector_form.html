@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if sector else 'Nuevo' }} Sector - Growth Horizon{% endblock %}
+{% block cabecera %}{{ 'Editar' if sector else 'Nuevo' }} Sector{% endblock %}
+{% block subcabecera %}Completa los datos del sector{% endblock %}
+
+{% block contenido %}
+<div class="max-w-xl">
+    <form method="POST" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 space-y-4">
+        <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Nombre *</label>
+            <input type="text" name="nombre" value="{{ sector.nombre if sector else '' }}" required
+                class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+        </div>
+        <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Descripcion</label>
+            <textarea name="descripcion" rows="3"
+                class="w-full px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">{{ sector.descripcion if sector else '' }}</textarea>
+        </div>
+        <div class="flex items-center gap-3 pt-2">
+            <button type="submit"
+                class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-emerald-600 transition">
+                {{ 'Actualizar' if sector else 'Crear' }}
+            </button>
+            <a href="{{ url_for('superadmin.sectores') }}" class="px-6 py-2 text-sm text-slate-600 hover:text-slate-800 transition">
+                Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

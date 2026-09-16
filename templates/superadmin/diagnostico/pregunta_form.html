@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}{% if pregunta %}Editar pregunta{% else %}Nueva pregunta{% endif %} - Growth Horizon{% endblock %}
+{% block cabecera %}{% if pregunta %}Editar pregunta{% else %}Nueva pregunta{% endif %}{% endblock %}
+{% block subcabecera %}Define las preguntas del cuestionario para cada dimension.{% endblock %}
+
+{% block contenido %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-8">
+        <form method="post">
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Dimension</label>
+                    <select name="dimension_id" required
+                            class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="">Seleccionar dimension...</option>
+                        {% for d in dimensiones %}
+                        <option value="{{ d.id_dimension }}" {% if pregunta and pregunta.id_dimension == d.id_dimension %}selected{% endif %}>{{ d.nombre }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Texto de la pregunta</label>
+                    <textarea name="texto" rows="3" required
+                              class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                              placeholder="Ej: Llevas un registro organizado de tus ingresos?">{{ pregunta.pregunta if pregunta else '' }}</textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de respuesta</label>
+                        <select name="tipo_respuesta" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="OPCION_UNICA" {% if pregunta and pregunta.tipo_respuesta == 'OPCION_UNICA' %}selected{% endif %}>Opcion unica</option>
+                            <option value="SI_NO" {% if pregunta and pregunta.tipo_respuesta == 'SI_NO' %}selected{% endif %}>Si/No</option>
+                            <option value="OPCION_MULTIPLE" {% if pregunta and pregunta.tipo_respuesta == 'OPCION_MULTIPLE' %}selected{% endif %}>Opcion multiple</option>
+                            <option value="NUMERICA" {% if pregunta and pregunta.tipo_respuesta == 'NUMERICA' %}selected{% endif %}>Numerica</option>
+                            <option value="TEXTO" {% if pregunta and pregunta.tipo_respuesta == 'TEXTO' %}selected{% endif %}>Texto libre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Tipo de medicion</label>
+                        <select name="tipo_medicion" class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="AUTOREPORTADO" {% if pregunta and pregunta.tipo_medicion == 'AUTOREPORTADO' %}selected{% endif %}>Autoreportado</option>
+                            <option value="CALCULADO" {% if pregunta and pregunta.tipo_medicion == 'CALCULADO' %}selected{% endif %}>Calculado (inventario)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Peso</label>
+                        <input type="number" name="peso" step="0.1" min="0" max="10"
+                               value="{{ pregunta.peso if pregunta else '1.0' }}"
+                               class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Orden</label>
+                        <input type="number" name="orden" min="1"
+                               value="{{ pregunta.orden if pregunta else '1' }}"
+                               class="w-full px-4 py-2.5 rounded-lg border border-slate-300 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" name="obligatoria" {% if not pregunta or pregunta.obligatoria %}checked{% endif %}
+                               class="w-4 h-4 text-indigo-600 rounded">
+                        <span class="text-sm font-medium text-slate-700">Pregunta obligatoria</span>
+                    </label>
+                </div>
+
+                <div id="opciones-container" style="{% if pregunta and pregunta.tipo_respuesta in ('NUMERICA', 'TEXTO') %}display:none{% endif %}">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Opciones de respuesta</label>
+                    <div id="opciones-list" class="space-y-2">
+                        {% if opciones %}
+                            {% for opt in opciones %}
+                            <div class="flex items-center gap-2 opcion-fila">
+                                <input type="text" name="opcion_texto[]" value="{{ opt.texto }}" placeholder="Texto"
+                                       class="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
+                                <input type="number" name="opcion_valor[]" value="{{ opt.valor }}" placeholder="Valor" step="0.01"
+                                       class="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
+                                <button type="button" onclick="this.closest('.opcion-fila').remove()" class="text-red-500 hover:text-red-700 text-sm">X</button>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="flex items-center gap-2 opcion-fila">
+                                <input type="text" name="opcion_texto[]" placeholder="Texto" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
+                                <input type="number" name="opcion_valor[]" placeholder="Valor" step="0.01" class="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">
+                                <button type="button" onclick="this.closest('.opcion-fila').remove()" class="text-red-500 hover:text-red-700 text-sm">X</button>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button type="button" onclick="agregarOpcion()" class="mt-2 text-sm text-indigo-600 hover:text-indigo-800">+ Agregar opcion</button>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 mt-6">
+                <a href="{{ url_for('diagnostico_admin.panel') }}" class="px-4 py-2 text-sm text-slate-600 hover:text-slate-800">Cancelar</a>
+                <button type="submit" class="px-6 py-2.5 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition">
+                    {% if pregunta %}Guardar cambios{% else %}Crear pregunta{% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function agregarOpcion() {
+    const list = document.getElementById('opciones-list');
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2 opcion-fila';
+    div.innerHTML = '<input type="text" name="opcion_texto[]" placeholder="Texto" class="flex-1 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">' +
+        '<input type="number" name="opcion_valor[]" placeholder="Valor" step="0.01" class="w-24 px-3 py-1.5 rounded-lg border border-slate-300 text-sm">' +
+        '<button type="button" onclick="this.closest(\'.opcion-fila\').remove()" class="text-red-500 hover:text-red-700 text-sm">X</button>';
+    list.appendChild(div);
+}
+
+document.querySelector('select[name="tipo_respuesta"]').addEventListener('change', function() {
+    const container = document.getElementById('opciones-container');
+    const tipo = this.value;
+    if (tipo === 'NUMERICA' || tipo === 'TEXTO') {
+        container.style.display = 'none';
+    } else {
+        container.style.display = 'block';
+    }
+});
+</script>
+{% endblock %}

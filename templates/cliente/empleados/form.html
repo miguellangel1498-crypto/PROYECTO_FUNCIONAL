@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}Nuevo empleado &middot; Growth Horizon{% endblock %}
+{% block cabecera %}Registrar empleado{% endblock %}
+{% block subcabecera %}Crea una cuenta de vendedor u operario para tu empresa.{% endblock %}
+
+{% block contenido %}
+    <div class="max-w-lg bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <form method="post" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium mb-1.5 text-slate-700">Nombre completo</label>
+                <input type="text" name="nombre" required
+                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-sm"
+                       placeholder="Ej: Carlos Pérez">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1.5 text-slate-700">Correo electrónico</label>
+                <input type="email" name="email" required
+                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-sm"
+                       placeholder="carlos@empresa.com">
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-1.5 text-slate-700">Cargo <span class="text-slate-400">(opcional)</span></label>
+                <input type="text" name="cargo"
+                       class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-sm"
+                       placeholder="Ej: Vendedor, Cajero">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Contraseña</label>
+                    <input type="password" name="password" required minlength="8"
+                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-sm"
+                           placeholder="Mínimo 8 caracteres">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-1.5 text-slate-700">Confirmar</label>
+                    <input type="password" name="confirmar_password" required minlength="8"
+                           class="w-full px-4 py-2.5 rounded-lg bg-slate-50 border border-slate-300 focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none text-sm"
+                           placeholder="Repetir contraseña">
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button type="submit"
+                        class="px-4 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 text-sm font-semibold hover:opacity-90 transition">
+                    Guardar empleado
+                </button>
+                <a href="{{ url_for('cliente.empleados_listar') }}"
+                   class="px-4 py-2.5 rounded-lg border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

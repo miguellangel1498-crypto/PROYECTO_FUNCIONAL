@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Resultados - Growth Horizon{% endblock %}
+{% block cabecera %}Resultados del Diagnostico{% endblock %}
+{% block subcabecera %}Evaluacion #{{ evaluacion.id_evaluacion }} - {{ evaluacion.empresa.nombre }}{% endblock %}
+
+{% block contenido %}
+{% if resultado %}
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+        <p class="text-sm text-slate-500 mb-1">Indice de Madurez</p>
+        <p class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-emerald-500">
+            {{ resultado.indice_madurez }}
+        </p>
+        <p class="text-xs text-slate-400 mt-1">de 100 puntos</p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+        <p class="text-sm text-slate-500 mb-1">Nivel de Madurez</p>
+        <p class="text-2xl font-bold
+            {% if resultado.nivel == 'OPTIMIZADO' %}text-emerald-600
+            {% elif resultado.nivel == 'AVANZADO' %}text-cyan-600
+            {% elif resultado.nivel == 'INTERMEDIO' %}text-blue-600
+            {% elif resultado.nivel == 'BASICO' %}text-amber-600
+            {% else %}text-red-600{% endif %}">
+            {{ resultado.nivel }}
+        </p>
+    </div>
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+        <p class="text-sm text-slate-500 mb-1">Fecha de Evaluacion</p>
+        <p class="text-lg font-semibold text-slate-700">
+            {{ evaluacion.fecha_finalizacion.strftime('%d/%m/%Y %H:%M') if evaluacion.fecha_finalizacion else 'N/A' }}
+        </p>
+        <p class="text-xs text-slate-400 mt-1">Version {{ evaluacion.version_diagnostico }}</p>
+    </div>
+</div>
+
+{% if promedio_sector %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+    <h3 class="text-lg font-bold text-slate-800 mb-2">Comparativo con tu sector</h3>
+    <div class="flex items-center gap-8">
+        <div>
+            <p class="text-sm text-slate-500">Tu indice</p>
+            <p class="text-2xl font-bold text-cyan-600">{{ resultado.indice_madurez }}</p>
+        </div>
+        <div>
+            <p class="text-sm text-slate-500">Promedio del sector</p>
+            <p class="text-2xl font-bold text-slate-600">{{ promedio_sector }}</p>
+        </div>
+        <div>
+            {% set diff = resultado.indice_madurez - promedio_sector %}
+            {% if diff > 0 %}
+            <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+                +{{ diff }} sobre el promedio
+            </span>
+            {% elif diff < 0 %}
+            <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-sm font-medium">
+                {{ diff }} bajo el promedio
+            </span>
+            {% else %}
+            <span class="px-3 py-1 bg-slate-100 text-slate-700 rounded-full text-sm font-medium">
+                En el promedio
+            </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+    <h3 class="text-lg font-bold text-slate-800 mb-4">Resultados por Dimension</h3>
+    <div class="space-y-4">
+        {% for dim_res in dimensiones_resultado %}
+        <div class="border border-slate-200 rounded-lg p-4">
+            <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-slate-700">{{ dim_res.dimension.nombre }}</h4>
+                <div class="flex items-center gap-3">
+                    <span class="text-sm font-bold
+                        {% if dim_res.nivel == 'OPTIMIZADO' %}text-emerald-600
+                        {% elif dim_res.nivel == 'AVANZADO' %}text-cyan-600
+                        {% elif dim_res.nivel == 'INTERMEDIO' %}text-blue-600
+                        {% elif dim_res.nivel == 'BASICO' %}text-amber-600
+                        {% else %}text-red-600{% endif %}">
+                        {{ dim_res.nivel }}
+                    </span>
+                    <span class="text-lg font-black text-slate-800">{{ dim_res.puntaje }}</span>
+                </div>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2 mb-2">
+                <div class="h-2 rounded-full
+                    {% if dim_res.puntaje >= 81 %}bg-emerald-500
+                    {% elif dim_res.puntaje >= 61 %}bg-cyan-500
+                    {% elif dim_res.puntaje >= 41 %}bg-blue-500
+                    {% elif dim_res.puntaje >= 21 %}bg-amber-500
+                    {% else %}bg-red-500{% endif %}"
+                    style="width: {{ dim_res.puntaje }}%"></div>
+            </div>
+            {% if dim_res.fortalezas %}
+            <p class="text-sm text-emerald-700 mt-2"><strong>Fortalezas:</strong> {{ dim_res.fortalezas }}</p>
+            {% endif %}
+            {% if dim_res.debilidades %}
+            <p class="text-sm text-red-700 mt-1"><strong>Debilidades:</strong> {{ dim_res.debilidades }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if recomendaciones %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 mb-8">
+    <h3 class="text-lg font-bold text-slate-800 mb-4">Recomendaciones Asignadas</h3>
+    <div class="space-y-3">
+        {% for rec in recomendaciones %}
+        <div class="flex items-start gap-4 p-4 border border-slate-200 rounded-lg">
+            <span class="px-2 py-1 text-xs font-bold rounded
+                {% if rec.recomendacion.prioridad == 'CRITICA' %}bg-red-100 text-red-700
+                {% elif rec.recomendacion.prioridad == 'ALTA' %}bg-amber-100 text-amber-700
+                {% elif rec.recomendacion.prioridad == 'MEDIA' %}bg-blue-100 text-blue-700
+                {% else %}bg-slate-100 text-slate-700{% endif %}">
+                {{ rec.recomendacion.prioridad }}
+            </span>
+            <div class="flex-1">
+                <p class="font-semibold text-slate-700">{{ rec.recomendacion.titulo }}</p>
+                <p class="text-sm text-slate-500 mt-1">{{ rec.recomendacion.descripcion }}</p>
+                <p class="text-xs text-slate-400 mt-2">Estado: <span class="font-medium">{{ rec.estado }}</span></p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+    <p class="text-slate-500">Los resultados aun no han sido calculados.</p>
+    <a href="{{ url_for('diagnostico.responder', id_evaluacion=evaluacion.id_evaluacion) }}"
+        class="mt-4 inline-block px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-emerald-600 transition">
+        Continuar evaluacion
+    </a>
+</div>
+{% endif %}
+
+<div class="flex items-center justify-between">
+    <a href="{{ url_for('diagnostico.historial') }}" class="px-6 py-2 text-sm text-slate-600 hover:text-slate-800 transition">
+        Ver historial
+    </a>
+    <a href="{{ url_for('recomendaciones.listar') }}" class="px-6 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white rounded-lg font-medium hover:from-cyan-600 hover:to-emerald-600 transition">
+        Ver recomendaciones
+    </a>
+</div>
+{% endblock %}

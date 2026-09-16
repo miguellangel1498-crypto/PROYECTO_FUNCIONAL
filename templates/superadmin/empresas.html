@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Empresas - Growth Horizon{% endblock %}
+{% block cabecera %}Gestion de Empresas{% endblock %}
+{% block subcabecera %}{{ empresas | length }} empresas{% endblock %}
+
+{% block contenido %}
+<div class="flex items-center justify-between mb-6">
+    <form method="GET" class="flex items-center gap-2">
+        <input type="text" name="q" value="{{ busqueda }}" placeholder="Buscar por nombre o NIT..."
+            class="px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+        <select name="estado" class="px-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-cyan-500">
+            <option value="">Todos los estados</option>
+            <option value="ACTIVA" {% if estado == 'ACTIVA' %}selected{% endif %}>Activas</option>
+            <option value="INACTIVA" {% if estado == 'INACTIVA' %}selected{% endif %}>Inactivas</option>
+        </select>
+        <button type="submit" class="px-4 py-2 bg-slate-100 text-slate-700 rounded-lg text-sm hover:bg-slate-200 transition">Filtrar</button>
+    </form>
+    <a href="{{ url_for('empresas.nueva') }}"
+        class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-emerald-500 text-white rounded-lg text-sm font-medium hover:from-cyan-600 hover:to-emerald-600 transition">
+        Nueva empresa
+    </a>
+</div>
+
+<div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-slate-200 bg-slate-50">
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Nombre</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">NIT</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Sector</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Tamano</th>
+                    <th class="text-left px-6 py-3 font-semibold text-slate-600">Estado</th>
+                    <th class="text-right px-6 py-3 font-semibold text-slate-600">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in empresas %}
+                <tr class="border-b border-slate-100 hover:bg-slate-50 transition">
+                    <td class="px-6 py-4 font-medium text-slate-800">{{ emp.nombre }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ emp.nit or '--' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ emp.sector.nombre if emp.sector else '--' }}</td>
+                    <td class="px-6 py-4 text-slate-600">{{ emp.tamano.nombre if emp.tamano else '--' }}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-xs font-bold rounded
+                            {% if emp.esta_activa %}bg-emerald-100 text-emerald-700
+                            {% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ emp.etiqueta_estado }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{{ url_for('superadmin.detalle_empresa', empresa_id=emp.id_empresa) }}"
+                                class="text-cyan-600 hover:text-cyan-800 font-medium transition">Ver</a>
+                            <a href="{{ url_for('empresas.editar', empresa_id=emp.id_empresa) }}"
+                                class="text-slate-500 hover:text-slate-700 font-medium transition">Editar</a>
+                            {% if emp.esta_activa %}
+                            <form method="POST" action="{{ url_for('superadmin.inactivar_empresa', empresa_id=emp.id_empresa) }}"
+                                onsubmit="return confirm('Inactivar esta empresa?');">
+                                <button type="submit" class="text-red-500 hover:text-red-700 font-medium transition">Inactivar</button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('superadmin.activar_empresa', empresa_id=emp.id_empresa) }}">
+                                <button type="submit" class="text-emerald-600 hover:text-emerald-800 font-medium transition">Activar</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

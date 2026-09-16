@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Sectores &middot; Growth Horizon{% endblock %}
+{% block cabecera %}Sectores económicos{% endblock %}
+{% block subcabecera %}Categorías para clasificar y filtrar el ecosistema de empresas.{% endblock %}
+
+{% block contenido %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100 flex items-center justify-between">
+            <p class="text-sm text-slate-500">
+                {{ sectores | length }} sector{% if sectores | length != 1 %}es{% endif %} configurados
+            </p>
+            <a href="{{ url_for('sectores.nuevo') }}" class="px-4 py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 text-sm font-semibold hover:opacity-90 transition">
+                ＋ Nuevo sector
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+            {% for sector in sectores %}
+                <div class="rounded-2xl border border-slate-200 p-6 hover:shadow-md transition">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl"
+                             style="background-color: {{ sector.color }}22; color: {{ sector.color }}">
+                            🗂️
+                        </div>
+                        <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                            {{ sector.empresas.count() }} empresas
+                        </span>
+                    </div>
+                    <h3 class="font-bold text-slate-900 text-lg">{{ sector.nombre }}</h3>
+                    <p class="text-sm text-slate-500 mt-1 mb-4">{{ sector.descripcion or 'Sin descripción.' }}</p>
+                    <div class="flex items-center gap-2 pt-3 border-t border-slate-100">
+                        <a href="{{ url_for('empresas.listar', sector=sector.id) }}"
+                           class="flex-1 text-center px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium hover:bg-slate-100 transition">Ver empresas</a>
+                        <a href="{{ url_for('sectores.editar', sector_id=sector.id) }}"
+                           class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium hover:bg-slate-100 transition">Editar</a>
+                        <form method="post" action="{{ url_for('sectores.eliminar', sector_id=sector.id) }}"
+                              onsubmit="return confirm('¿Eliminar el sector {{ sector.nombre }}?')" class="gh-delete-form">
+                            <button type="submit" class="gh-delete-btn-sm">
+                                <svg class="gh-delete-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <div class="col-span-full text-center py-16">
+                    <p class="text-slate-400 text-sm">Aún no hay sectores configurados.</p>
+                    <a href="{{ url_for('sectores.nuevo') }}" class="inline-block mt-3 text-sm text-cyan-600 hover:text-cyan-700">＋ Crear el primer sector</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

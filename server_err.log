@@ -1,0 +1,461 @@
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.133.121.65:5000
+Press CTRL+C to quit
+127.0.0.1 - - [01/Sep/2026 14:03:45] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:03:45] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Sep/2026 14:06:26] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:06:28] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 14:06:28] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:59:41] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:59:45] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 14, in top-level template code
+    <a class="navbar-brand" href="{{ url_for('index') }}">Growth Horizon</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?
+127.0.0.1 - - [01/Sep/2026 14:59:45] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:59:45] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:59:45] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 14:59:45] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+10.233.184.65 - - [01/Sep/2026 15:00:21] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 14, in top-level template code
+    <a class="navbar-brand" href="{{ url_for('index') }}">Growth Horizon</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?
+10.233.184.65 - - [01/Sep/2026 15:00:21] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+10.233.184.65 - - [01/Sep/2026 15:00:21] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+10.233.184.65 - - [01/Sep/2026 15:00:21] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 15:00:26] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 14, in top-level template code
+    <a class="navbar-brand" href="{{ url_for('index') }}">Growth Horizon</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?
+127.0.0.1 - - [01/Sep/2026 15:00:26] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 15:00:26] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 15:00:27] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 15:00:27] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 15:29:26] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 17, in top-level template code
+    <a class="nav-link" href="{{ url_for('test') }}">Test</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'test'. Did you mean 'auth.registro' instead?
+127.0.0.1 - - [01/Sep/2026 15:29:26] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:29:26] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:29:26] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:37] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 17, in top-level template code
+    <a class="nav-link" href="{{ url_for('test') }}">Test</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'test'. Did you mean 'auth.registro' instead?
+127.0.0.1 - - [01/Sep/2026 15:30:37] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:37] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:37] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:47] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 17, in top-level template code
+    <a class="nav-link" href="{{ url_for('test') }}">Test</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'test'. Did you mean 'auth.registro' instead?
+127.0.0.1 - - [01/Sep/2026 15:30:47] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:47] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:47] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:58] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 17, in top-level template code
+    <a class="nav-link" href="{{ url_for('test') }}">Test</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'test'. Did you mean 'auth.registro' instead?
+127.0.0.1 - - [01/Sep/2026 15:30:58] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:58] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:30:58] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:50:38] "GET / HTTP/1.1" 500 -
+Traceback (most recent call last):
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\routes\main.py", line 12, in index
+    return render_template("index.html")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 151, in render_template
+    return _render(app, template, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\templating.py", line 132, in _render
+    rv = template.render(context)
+         ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 1295, in render
+    self.environment.handle_exception()
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\jinja2\environment.py", line 942, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\index.html", line 1, in top-level template code
+    {% extends "layout.html" %}
+  File "C:\Users\MiguelPruebas\Desktop\growth-horizon-Proyecto\templates\layout.html", line 14, in top-level template code
+    <a class="navbar-brand" href="{{ url_for('index') }}">Growth Horizon</a>
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1121, in url_for
+    return self.handle_url_build_error(error, endpoint, values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask\app.py", line 1110, in url_for
+    rv = url_adapter.build(  # type: ignore[union-attr]
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\MiguelPruebas\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\routing\map.py", line 901, in build
+    raise BuildError(endpoint, values, method, self)
+werkzeug.routing.exceptions.BuildError: Could not build url for endpoint 'index'. Did you mean 'main.index' instead?
+127.0.0.1 - - [01/Sep/2026 15:50:38] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:50:38] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 15:50:38] "GET /?__debugger__=yes&cmd=resource&f=console.png&s=ynZ10iJ4YK4ayJUgUp0m HTTP/1.1" 304 -
+127.0.0.1 - - [01/Sep/2026 16:08:24] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:39] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:41] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:08:41] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:43] "GET /superadmin/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:43] "GET /superadmin/empresas HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:44] "GET /superadmin/empresas/pendientes HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:45] "GET /superadmin/permisos HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:45] "GET /sectores/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:46] "GET /seguridad/auditoria HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:08:46] "GET /analisis/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:09:55] "GET /auth/salir HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:09:55] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:05] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:16] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:17] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:18:17] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:20] "GET /analisis/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:22] "GET /seguridad/auditoria HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:24] "GET /sectores/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:27] "GET /superadmin/permisos HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:18:55] "GET /auth/salir HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:18:56] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:23:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:24:09] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:24:11] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:24:11] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:24:12] "GET /superadmin/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:24:13] "GET /superadmin/empresas HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:57:38] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:57:51] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 16:57:54] "GET /auth/salir HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 16:57:54] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:03:56] "GET /superadmin/empresas HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 17:03:56] "GET /auth/login?next=/superadmin/empresas HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:37] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:39] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:40] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 17:09:40] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:49] "GET /analisis/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:50] "GET /seguridad/auditoria HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:50] "GET /sectores/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:51] "GET /superadmin/permisos HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:51] "GET /superadmin/empresas/pendientes HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:52] "GET /superadmin/empresas HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:52] "GET /superadmin/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:09:58] "GET /auth/salir HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 17:09:58] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:10:00] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:10:03] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:10:11] "GET /auth/login HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:10:12] "POST /auth/login HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 17:10:12] "GET /dashboard HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:18:18] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Sep/2026 17:20:39] "GET /auth/salir HTTP/1.1" 302 -
+127.0.0.1 - - [01/Sep/2026 17:20:39] "GET / HTTP/1.1" 200 -

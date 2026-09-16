@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Recomendaciones - Growth Horizon{% endblock %}
+{% block cabecera %}Recomendaciones Asignadas{% endblock %}
+{% block subcabecera %}Gestiona el avance de las recomendaciones de tu empresa{% endblock %}
+
+{% block contenido %}
+<div class="flex items-center gap-3 mb-6">
+    <a href="{{ url_for('recomendaciones.listar') }}"
+        class="px-4 py-2 rounded-lg text-sm font-medium transition
+        {% if not estado_filtro %}bg-gradient-to-r from-cyan-500 to-emerald-500 text-white{% else %}bg-white text-slate-600 border border-slate-200 hover:border-cyan-300{% endif %}">
+        Todas
+    </a>
+    <a href="{{ url_for('recomendaciones.listar', estado='PENDIENTE') }}"
+        class="px-4 py-2 rounded-lg text-sm font-medium transition
+        {% if estado_filtro == 'PENDIENTE' %}bg-amber-100 text-amber-700 border border-amber-300{% else %}bg-white text-slate-600 border border-slate-200 hover:border-amber-300{% endif %}">
+        Pendientes
+    </a>
+    <a href="{{ url_for('recomendaciones.listar', estado='EN_PROCESO') }}"
+        class="px-4 py-2 rounded-lg text-sm font-medium transition
+        {% if estado_filtro == 'EN_PROCESO' %}bg-blue-100 text-blue-700 border border-blue-300{% else %}bg-white text-slate-600 border border-slate-200 hover:border-blue-300{% endif %}">
+        En proceso
+    </a>
+    <a href="{{ url_for('recomendaciones.listar', estado='COMPLETADA') }}"
+        class="px-4 py-2 rounded-lg text-sm font-medium transition
+        {% if estado_filtro == 'COMPLETADA' %}bg-emerald-100 text-emerald-700 border border-emerald-300{% else %}bg-white text-slate-600 border border-slate-200 hover:border-emerald-300{% endif %}">
+        Completadas
+    </a>
+    <a href="{{ url_for('recomendaciones.listar', estado='DESCARTADA') }}"
+        class="px-4 py-2 rounded-lg text-sm font-medium transition
+        {% if estado_filtro == 'DESCARTADA' %}bg-slate-200 text-slate-700 border border-slate-400{% else %}bg-white text-slate-600 border border-slate-200 hover:border-slate-400{% endif %}">
+        Descartadas
+    </a>
+</div>
+
+<div class="space-y-4">
+    {% if asignaciones %}
+    {% for asig in asignaciones %}
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div class="flex items-start justify-between">
+            <div class="flex-1">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="px-2 py-1 text-xs font-bold rounded
+                        {% if asig.recomendacion.prioridad == 'CRITICA' %}bg-red-100 text-red-700
+                        {% elif asig.recomendacion.prioridad == 'ALTA' %}bg-amber-100 text-amber-700
+                        {% elif asig.recomendacion.prioridad == 'MEDIA' %}bg-blue-100 text-blue-700
+                        {% else %}bg-slate-100 text-slate-700{% endif %}">
+                        {{ asig.recomendacion.prioridad }}
+                    </span>
+                    <span class="px-2 py-1 text-xs font-medium rounded
+                        {% if asig.estado == 'PENDIENTE' %}bg-amber-50 text-amber-600
+                        {% elif asig.estado == 'EN_PROCESO' %}bg-blue-50 text-blue-600
+                        {% elif asig.estado == 'COMPLETADA' %}bg-emerald-50 text-emerald-600
+                        {% else %}bg-slate-100 text-slate-500{% endif %}">
+                        {{ asig.estado.replace('_', ' ') }}
+                    </span>
+                </div>
+                <h4 class="font-bold text-slate-800 mb-1">{{ asig.recomendacion.titulo }}</h4>
+                <p class="text-sm text-slate-600 mb-2">{{ asig.recomendacion.descripcion }}</p>
+                <p class="text-xs text-slate-400">
+                    Dimension: {{ asig.recomendacion.dimension.nombre }} |
+                    Asignada: {{ asig.fecha_asignacion.strftime('%d/%m/%Y') if asig.fecha_asignacion else 'N/A' }}
+                    {% if asig.fecha_completada %}
+                    | Completada: {{ asig.fecha_completada.strftime('%d/%m/%Y') }}
+                    {% endif %}
+                </p>
+            </div>
+            <div class="ml-4">
+                <form method="POST" action="{{ url_for('recomendaciones.cambiar_estado', id_asignacion=asig.id_empresa_recomendacion) }}">
+                    <select name="estado" onchange="this.form.submit()"
+                        class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500">
+                        <option value="PENDIENTE" {% if asig.estado == 'PENDIENTE' %}selected{% endif %}>Pendiente</option>
+                        <option value="EN_PROCESO" {% if asig.estado == 'EN_PROCESO' %}selected{% endif %}>En proceso</option>
+                        <option value="COMPLETADA" {% if asig.estado == 'COMPLETADA' %}selected{% endif %}>Completada</option>
+                        <option value="DESCARTADA" {% if asig.estado == 'DESCARTADA' %}selected{% endif %}>Descartada</option>
+                    </select>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+        <p class="text-slate-500">No hay recomendaciones {% if estado_filtro %}con estado "{{ estado_filtro.replace('_', ' ') }}" {% endif %}asignadas.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

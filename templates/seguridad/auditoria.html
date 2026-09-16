@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Auditoria - Growth Horizon{% endblock %}
+{% block cabecera %}Registro de auditoria{% endblock %}
+{% block subcabecera %}Trazabilidad de acciones: quien, que y cuando.{% endblock %}
+
+{% block contenido %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="p-6 border-b border-slate-100">
+            <form method="get" class="flex flex-col sm:flex-row gap-3">
+                <input type="text" name="q" value="{{ busqueda }}"
+                        placeholder="Buscar por texto, accion o entidad..."
+                        class="flex-1 px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none">
+                <select name="accion" class="px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-cyan-500 outline-none">
+                    <option value="">Todas las acciones</option>
+                    {% for a in acciones %}
+                        <option value="{{ a }}" {% if a == accion %}selected{% endif %}>{{ a }}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" name="usuario" value="{{ email }}"
+                        placeholder="Filtrar por correo..."
+                        class="flex-1 sm:max-w-xs px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 outline-none">
+                <button type="submit" class="px-4 py-2 rounded-lg bg-slate-900 text-white text-sm font-medium hover:bg-slate-700 transition">Filtrar</button>
+                {% if accion or email or busqueda %}
+                    <a href="{{ url_for('seguridad.auditoria') }}" class="px-4 py-2 rounded-lg border border-slate-300 text-sm font-medium hover:bg-slate-50 transition">Limpiar</a>
+                {% endif %}
+            </form>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-xs uppercase tracking-wider text-slate-500 border-b border-slate-100 bg-slate-50">
+                        <th class="px-6 py-3 font-semibold">Fecha / hora</th>
+                        <th class="px-6 py-3 font-semibold">Usuario</th>
+                        <th class="px-6 py-3 font-semibold">Accion</th>
+                        <th class="px-6 py-3 font-semibold">Entidad</th>
+                        <th class="px-6 py-3 font-semibold">Detalle</th>
+                        <th class="px-6 py-3 font-semibold">IP</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100">
+                {% for reg in registros.items %}
+                    <tr class="hover:bg-slate-50 transition">
+                        <td class="px-6 py-3 text-slate-600 whitespace-nowrap">{{ reg.fecha.strftime('%d/%m/%Y %H:%M:%S') if reg.fecha else '---' }}</td>
+                        <td class="px-6 py-3">
+                            {% if reg.usuario %}
+                                <span class="font-medium text-slate-800">{{ reg.usuario.correo }}</span>
+                            {% else %}
+                                <span class="text-slate-400">Anonimo</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-3">
+                            <span class="inline-block px-2.5 py-1 rounded-full text-xs font-medium
+                                {% if 'LOGIN' in reg.accion and 'EXITOSO' in reg.accion %}bg-emerald-100 text-emerald-700
+                                {% elif 'LOGIN' in reg.accion and 'FALLIDO' in reg.accion %}bg-red-100 text-red-700
+                                {% elif reg.accion == 'LOGOUT' %}bg-amber-100 text-amber-700
+                                {% else %}bg-slate-100 text-slate-700{% endif %}">
+                                {{ reg.accion }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-3 text-slate-600">
+                            {{ reg.tabla_afectada or '---' }}{% if reg.id_registro %}#{{ reg.id_registro }}{% endif %}
+                        </td>
+                        <td class="px-6 py-3 text-slate-600 max-w-[260px]">
+                            <span class="block truncate" title="{{ reg.descripcion }}">{{ reg.descripcion or '---' }}</span>
+                        </td>
+                        <td class="px-6 py-3 text-slate-500 font-mono text-xs">{{ reg.direccion_ip or '---' }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-slate-400 text-sm">No hay registros con esos filtros.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if registros.pages > 1 %}
+        <div class="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
+            <p class="text-sm text-slate-500">
+                Pagina {{ registros.page }} de {{ registros.pages }}
+                ({{ registros.total }} registros)
+            </p>
+            <div class="flex gap-2">
+                {% if registros.has_prev %}
+                    <a href="{{ url_for('seguridad.auditoria', page=registros.prev_num, accion=accion, usuario=email, q=busqueda) }}"
+                        class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium hover:bg-slate-50 transition">Anterior</a>
+                {% endif %}
+                {% if registros.has_next %}
+                    <a href="{{ url_for('seguridad.auditoria', page=registros.next_num, accion=accion, usuario=email, q=busqueda) }}"
+                        class="px-3 py-1.5 rounded-lg border border-slate-300 text-xs font-medium hover:bg-slate-50 transition">Siguiente</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

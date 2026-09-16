@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growth Horizon &middot; Diagnostico de madurez empresarial</title>
+    <meta name="description"
+        content="Plataforma de diagnostico de madurez empresarial y digital para pequenas y medianas empresas.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ripple.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            900: '#134e4a',
+                            700: '#115e59',
+                            600: '#0f766e',
+                            500: '#0e7490',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #0D1117 0%, #1a1f3a 50%, #0f3460 100%); }
+        .feature-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .feature-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-white antialiased">
+
+    <nav class="fixed top-0 inset-x-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-emerald-500 flex items-center justify-center text-sm font-black text-slate-900">GH</div>
+                <span class="text-lg font-bold text-white">Growth Horizon</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="{{ url_for('auth.login') }}" class="text-sm text-slate-400 hover:text-white transition">Iniciar sesion</a>
+                <a href="{{ url_for('auth.registro') }}" class="px-4 py-2 rounded-lg bg-indigo-600 text-white text-sm font-semibold hover:bg-indigo-700 transition">Registrarse</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-gradient min-h-screen flex items-center pt-20">
+        <div class="max-w-7xl mx-auto px-6 py-20">
+            <div class="max-w-3xl">
+                <p class="text-sm font-semibold text-emerald-400 tracking-wider uppercase mb-4">Diagnostico de madurez empresarial</p>
+                <h1 class="text-5xl sm:text-6xl font-black leading-tight mb-6">
+                    Mide el nivel de <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-emerald-500">madurez digital</span> de tu negocio
+                </h1>
+                <p class="text-xl text-slate-400 mb-8 max-w-2xl">
+                    Responde un cuestionario organizado por dimensiones, obtien un indice de madurez ponderado, compara tu empresa contra el promedio de tu sector y recibe recomendaciones personalizadas.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <a href="{{ url_for('auth.registro') }}" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 font-bold text-lg hover:opacity-90 transition">
+                        Empezar diagnostico
+                    </a>
+                    <a href="#como-funciona" class="px-8 py-3.5 rounded-xl border border-white/20 text-white font-semibold hover:bg-white/5 transition">
+                        Como funciona
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="como-funciona" class="py-24 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-sm font-semibold text-emerald-400 tracking-wider uppercase mb-3 text-center">Proceso</p>
+            <h2 class="text-4xl font-black text-center mb-16">4 pasos para diagnosticar tu madurez</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center text-2xl font-black text-cyan-400 mx-auto mb-4">1</div>
+                    <h3 class="text-lg font-bold mb-2">Responde</h3>
+                    <p class="text-sm text-slate-400">Completa el cuestionario organizado en 8 dimensiones de madurez empresarial.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-2xl font-black text-emerald-400 mx-auto mb-4">2</div>
+                    <h3 class="text-lg font-bold mb-2">Calcula</h3>
+                    <p class="text-sm text-slate-400">El sistema calcula un indice de madurez ponderado segun el peso de cada dimension.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-2xl font-black text-indigo-400 mx-auto mb-4">3</div>
+                    <h3 class="text-lg font-bold mb-2">Compara</h3>
+                    <p class="text-sm text-slate-400">Compara tu resultado contra el promedio de tu sector y empresas de tamano similar.</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-2xl font-black text-amber-400 mx-auto mb-4">4</div>
+                    <h3 class="text-lg font-bold mb-2">Recomienda</h3>
+                    <p class="text-sm text-slate-400">Recibe recomendaciones priorizadas para mejorar tu nivel de madurez.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-slate-950">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-sm font-semibold text-emerald-400 tracking-wider uppercase mb-3 text-center">Dimensiones</p>
+            <h2 class="text-4xl font-black text-center mb-16">8 dimensiones de analisis</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[$]</div>
+                    <h3 class="font-bold text-lg mb-2">Financiera</h3>
+                    <p class="text-sm text-slate-400">Salud financiera, control de ingresos y gastos, planificacion presupuestaria.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[O]</div>
+                    <h3 class="font-bold text-lg mb-2">Operacion</h3>
+                    <p class="text-sm text-slate-400">Procesos internos, eficiencia operativa, control de inventario.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[C]</div>
+                    <h3 class="font-bold text-lg mb-2">Clientes/Ventas</h3>
+                    <p class="text-sm text-slate-400">Gestion de clientes, estrategia comercial, canales de venta.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[D]</div>
+                    <h3 class="font-bold text-lg mb-2">Digitalizacion</h3>
+                    <p class="text-sm text-slate-400">Uso de herramientas digitales, presencia online, transformacion digital.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[DA]</div>
+                    <h3 class="font-bold text-lg mb-2">Datos</h3>
+                    <p class="text-sm text-slate-400">Gestion de datos, toma de decisiones basada en datos.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[S]</div>
+                    <h3 class="font-bold text-lg mb-2">Seguridad</h3>
+                    <p class="text-sm text-slate-400">Proteccion de datos, ciberseguridad, respaldos.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[A]</div>
+                    <h3 class="font-bold text-lg mb-2">Automatizacion</h3>
+                    <p class="text-sm text-slate-400">Automatizacion de procesos, uso de tecnologia para reducir tareas manuales.</p>
+                </div>
+                <div class="feature-card bg-slate-900 border border-white/5 rounded-2xl p-6">
+                    <div class="text-3xl mb-3">[AN]</div>
+                    <h3 class="font-bold text-lg mb-2">Analitica</h3>
+                    <p class="text-sm text-slate-400">Analisis de datos, metricas, reportes, inteligencia de negocio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-slate-900">
+        <div class="max-w-7xl mx-auto px-6">
+            <p class="text-sm font-semibold text-emerald-400 tracking-wider uppercase mb-3 text-center">Segmentacion</p>
+            <h2 class="text-4xl font-black text-center mb-16">3 niveles de madurez</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-slate-950 border border-white/5 rounded-2xl p-8 text-center">
+                    <div class="text-4xl font-black text-red-400 mb-2">0-39</div>
+                    <h3 class="text-xl font-bold mb-3">Inicial</h3>
+                    <p class="text-sm text-slate-400">La empresa esta en etapas tempranas de madurez digital. Procesos mayormente manuales, poca tecnologia.</p>
+                </div>
+                <div class="bg-slate-950 border border-white/5 rounded-2xl p-8 text-center">
+                    <div class="text-4xl font-black text-amber-400 mb-2">40-69</div>
+                    <h3 class="text-xl font-bold mb-3">En Desarrollo</h3>
+                    <p class="text-sm text-slate-400">La empresa ha iniciado su transformacion digital con algunos procesos automatizados y herramientas implementadas.</p>
+                </div>
+                <div class="bg-slate-950 border border-white/5 rounded-2xl p-8 text-center">
+                    <div class="text-4xl font-black text-emerald-400 mb-2">70-100</div>
+                    <h3 class="text-xl font-bold mb-3">Consolidado</h3>
+                    <p class="text-sm text-slate-400">La empresa tiene alto nivel de madurez digital con procesos optimizados, datos integrados y analitica avanzada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-slate-950">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-black mb-6">Empieza a diagnosticar tu empresa hoy</h2>
+            <p class="text-lg text-slate-400 mb-8">En menos de 10 minutos conoceras el nivel de madurez digital de tu negocio y recibiras recomendaciones concretas para mejorar.</p>
+            <a href="{{ url_for('auth.registro') }}" class="inline-block px-10 py-4 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 text-slate-900 font-bold text-lg hover:opacity-90 transition">
+                Crear cuenta gratis
+            </a>
+        </div>
+    </section>
+
+    <footer class="py-12 bg-slate-900 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+                <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-400 to-emerald-500 flex items-center justify-center text-xs font-black text-slate-900">GH</div>
+                <span class="text-sm font-bold text-white">Growth Horizon</span>
+            </div>
+            <p class="text-xs text-slate-500">2026 Growth Horizon. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
