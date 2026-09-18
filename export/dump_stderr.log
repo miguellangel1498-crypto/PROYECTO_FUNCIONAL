@@ -1,0 +1,1 @@
+mysqldump.exe: Couldn't execute 'show create table `auditoria`': Lost connection to MySQL server during query (2013)
